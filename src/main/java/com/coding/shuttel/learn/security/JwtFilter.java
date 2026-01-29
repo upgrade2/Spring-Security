@@ -1,6 +1,7 @@
 package com.coding.shuttel.learn.security;
 
 import com.coding.shuttel.learn.repository.entity.User;
+import com.coding.shuttel.learn.service.JwtService;
 import com.coding.shuttel.learn.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -28,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     String token = requestTokenHeader.split("Bearer")[1];
-    Long userId=null; //jwtService call
+    Long userId=jwtService.getUserIdFromToken(token);
 
         if(userId!=null && SecurityContextHolder.getContext().getAuthentication()==null){
             //generate token

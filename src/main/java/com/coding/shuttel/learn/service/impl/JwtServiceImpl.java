@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -14,7 +15,7 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secret.key}")
     private String jwtSecretKey;
 
-    private SecretKey getSecretKey(){return Keys.h}
+    private SecretKey getSecretKey(){return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));}
     @Override
     public String generateAccessToken(User user) {
         return null;
