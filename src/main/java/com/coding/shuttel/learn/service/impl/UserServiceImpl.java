@@ -1,5 +1,8 @@
 package com.coding.shuttel.learn.service.impl;
 
+import com.coding.shuttel.learn.dto.ApiResponse;
+import com.coding.shuttel.learn.dto.SignUpDTO;
+import com.coding.shuttel.learn.dto.UserDTO;
 import com.coding.shuttel.learn.exception.ResourceNotFoundException;
 import com.coding.shuttel.learn.repository.UserRepository;
 import com.coding.shuttel.learn.repository.entity.User;
@@ -12,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +40,18 @@ public class UserServiceImpl implements UserDetailsService,UserService {
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public UserDTO signUp(SignUpDTO signUpDTO) {
+        Optional<User> user = userRepository.findByEmail(signUpDTO.getEmail());
+        if(user.isPresent()){
+            throw new BadCredentialsException("User with email already exits "+signUpDTO.getEmail());
+        }
+        User toBeCreatedUser = modelMapper.map(signUpDTO,User.class);
+        toBeCreatedUser.setPassword(passwordEncoder.encode(toBeCreatedUser.getPassword()));
+
+        User savedUser = userRepository.save(toBeCreatedUser);
+        return modelMapper.map(savedUser, UserDTO.class);
     }
 }
