@@ -2,6 +2,7 @@ package com.coding.shuttel.learn.controller.impl;
 
 import com.coding.shuttel.learn.controller.AuthController;
 import com.coding.shuttel.learn.dto.*;
+import com.coding.shuttel.learn.service.AuthService;
 import com.coding.shuttel.learn.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthControllerImpl implements AuthController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @Override
     @PostMapping("/sign-up")
@@ -29,7 +31,8 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
+    @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest request, HttpServletResponse response) {
-        return null;
+        return ResponseEntity.ok(authService.login(loginRequestDTO));
     }
 }

@@ -1,15 +1,22 @@
 package com.coding.shuttel.learn.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Builder
 public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +28,7 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("ADMIN"),new SimpleGrantedAuthority("USER"));
     }
 
     @Override
