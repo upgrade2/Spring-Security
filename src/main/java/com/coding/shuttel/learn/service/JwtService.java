@@ -6,4 +6,6 @@ public interface JwtService {
     public String generateAccessToken(User user);
     public Long getUserIdFromToken(String token);
 
+    public String generateRefreshToken(User user);
+
 }
