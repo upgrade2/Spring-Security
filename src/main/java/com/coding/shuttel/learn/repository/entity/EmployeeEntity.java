@@ -18,5 +18,6 @@ public class EmployeeEntity {
     private Long id;
     private String name;
     private String dept;
+    private String email;
 
 }

@@ -2,9 +2,10 @@ package com.coding.shuttel.learn.service.impl;
 
 import com.coding.shuttel.learn.dto.ApiResponse;
 import com.coding.shuttel.learn.dto.EmployeeDTO;
+import com.coding.shuttel.learn.exception.RecordAlreadyExistException;
 import com.coding.shuttel.learn.repository.EmployeeRepository;
 import com.coding.shuttel.learn.repository.entity.EmployeeEntity;
-import com.coding.shuttel.learn.service.PostService;
+import com.coding.shuttel.learn.service.CommonApiService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class PostServiceImpl implements PostService {
+public class CommonApiServiceImpl implements CommonApiService {
 
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
@@ -37,6 +38,24 @@ public class PostServiceImpl implements PostService {
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> saveEmployee(EmployeeDTO employeeDTO) {
+        validateEmployee(employeeDTO);
+        EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
+        EmployeeEntity savedData = employeeRepository.save(employeeEntity);
+        ApiResponse apiResponse = new ApiResponse("Data saved successfully",HttpStatus.OK);
+        apiResponse.setData(savedData);
+        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
+    }
 
+    private boolean validateEmployee(EmployeeDTO employeeDTO) {
+        boolean isPresent = employeeRepository
+                .findByEmail(employeeDTO.getEmail())
+                .isPresent();
+        if(isPresent) {
+            throw new RecordAlreadyExistException("Employee already exists with email "+employeeDTO.getEmail());
+        }
+        return false;
+    }
 
 }

@@ -15,6 +15,12 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse(exception.getLocalizedMessage(),HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(RecordAlreadyExistException.class)
+    public ResponseEntity<ApiResponse> handelRecordAlreadyExistException(RecordAlreadyExistException exception){
+        ApiResponse apiResponse = new ApiResponse(exception.getLocalizedMessage(),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handelException(Exception exception){
         ApiResponse apiResponse = new ApiResponse(exception.getLocalizedMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
