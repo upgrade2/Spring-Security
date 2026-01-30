@@ -27,7 +27,7 @@ public class JwtServiceImpl implements JwtService {
                 .claim("email",user.getEmail())
                 .claim("roles", Set.of("ADMIN","USER")) //currently no roles.
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+1000*60*10))
+                .expiration(new Date(System.currentTimeMillis()+1000*10))
                 .signWith(getSecretKey())
                 .compact();
 
@@ -49,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+1000L*60*60*24*30*6))
+                .expiration(new Date(System.currentTimeMillis()+1000L*20))
                 .signWith(getSecretKey())
                 .compact();
     }
